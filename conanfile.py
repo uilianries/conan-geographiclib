@@ -43,6 +43,8 @@ class GeographiclibConan(ConanFile):
         return cmake
 
     def build(self):
+        # it does not work on Windows but is not needed
+        tools.replace_in_file(os.path.join(self.source_subfolder, "CMakeLists.txt"), "add_subdirectory (js)", "")
         cmake = self.configure_cmake()
         cmake.build()
 
@@ -51,7 +53,7 @@ class GeographiclibConan(ConanFile):
         cmake = self.configure_cmake()
         cmake.install()
         # there is no option to disable subdirectories
-        for folder in ["share", os.path.join("lib", "python"), os.path.join("lib", "node_modules"), "bin", "sbin"]:
+        for folder in ["share", os.path.join("lib", "python"), "bin", "sbin", "python", "matlab", "doc"]:
             shutil.rmtree(os.path.join(self.package_folder, folder), ignore_errors=True)
 
     def package_info(self):
